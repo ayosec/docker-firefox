@@ -1,0 +1,31 @@
+#!/bin/bash
+
+set -e
+
+export DISPLAY=:0
+
+Xvfb :0 -screen 0 1200x800x16 -ac +render &
+XSERVER=$!
+
+sleep 2
+x11vnc -forever        \
+       -bg             \
+       -nopw           \
+       -nobell         \
+       -nosel          \
+       -noprimary      \
+       -nosetprimary   \
+       -noclipboard    \
+       -nosetclipboard \
+
+
+ratpoison &
+
+echo -e '\e[1mAddress:\e[m'
+ip addr show eth0 | grep inet
+
+firefox
+
+kill -9 $XSERVER
+wait
+wait

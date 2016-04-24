@@ -1,0 +1,8 @@
+
+Build with
+
+  docker build -t firefox .
+
+To use you own ~/.mozilla
+
+  docker run --rm -ti -v /path/to/my/mozilla:/browser/.mozilla/ firefox /browser/system
