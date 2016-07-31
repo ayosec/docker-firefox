@@ -1,0 +1,101 @@
+#!/usr/bin/env ruby
+
+require "optparse"
+require "socket"
+
+IMAGE_NAME = "firefox"
+
+def host_addr
+  Socket.getifaddrs.
+         find {|f| f.name == "docker0" and f.addr.ip? and f.addr.ipv6? == false }.
+         addr.ip_address
+end
+
+share_x11 = false
+share_audio = false
+share_downloads = true
+shared_downloads_path = "/tmp/firefox-downloads"
+
+OptionParser.new do |opts|
+  opts.on "-a", "--[no-]share-audio", "Share PulseAudio server" do |v|
+    share_audio = v
+  end
+
+  opts.on "-x", "--[no-]share-x11", "Share X11 instance" do |v|
+    share_x11 = v
+  end
+
+  opts.on "-d", "--disable-share-downloads", "Disable shared downloads path" do |v|
+    share_downloads = !v
+  end
+
+  opts.on "-DPATH", "--downloads=PATH", "Path shared by downloads" do |v|
+    shared_downloads_path = v
+  end
+end.parse!
+
+cmd = [ "docker", "run", "-t", "--name", "firefox-" + Time.now.strftime("%Y%m%d%H%M%S") ]
+
+if share_x11
+  cmd.concat %w(-i --rm -v /tmp/.X11-unix/:/tmp/.X11-unix -e)
+  cmd << "DISPLAY=#{ENV["DISPLAY"]}"
+else
+  cmd << "-d"
+end
+
+if share_audio
+  cmd << "-e" << "PULSE_SERVER=tcp:#{host_addr}"
+end
+
+if share_downloads
+  if not File.directory?(shared_downloads_path)
+    Dir.mkdir shared_downloads_path
+  end
+
+  cmd << "-v" << "#{shared_downloads_path}:/browser/Downloads"
+  STDERR.puts "[INFO] Shared downloads in #{shared_downloads_path}"
+end
+
+cmd << IMAGE_NAME
+
+if share_x11
+  cmd.concat %w(firefox --new-instance --Private)
+else
+  cmd << "/browser/system"
+end
+
+puts "[INFO] #{cmd.join(" ")}"
+
+if share_x11
+
+  exec(*cmd)
+
+else
+
+  cid = IO.popen(cmd).read.strip
+  ip_address = IO.popen(["docker", "inspect",  "-f", "{{.NetworkSettings.IPAddress}}", cid]).read.strip
+  puts "[INFO] Container #{cid} @ #{ip_address}"
+
+  vnc_pid = fork do
+    n = 0
+    while n < 1000
+      begin
+        TCPSocket.new(ip_address, 5900).close
+        break
+      rescue Errno::ECONNREFUSED
+        STDERR.print "\rWait VNC (#{n})\033[K"
+        STDERR.flush
+        sleep 0.1
+        n += 1
+        retry
+      end
+    end
+
+    exec "vncviewer", "-encodings", "copyrect tight zrle hextile", "#{ip_address}:0"
+  end
+
+  system "docker", "wait", cid
+  system "docker", "rm", cid
+  Process.waitpid(vnc_pid)
+
+end

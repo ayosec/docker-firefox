@@ -20,4 +20,7 @@ RUN chown -R browser: /browser
 ADD prefs.js /etc/firefox-esr/sane.js
 ADD prefs.js /etc/firefox/sane.js
 
+ADD local-run.sh /tmp/
+RUN sh /tmp/local-run.sh
+
 USER browser
