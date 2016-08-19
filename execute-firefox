@@ -15,6 +15,7 @@ share_x11 = false
 share_audio = false
 share_downloads = true
 shared_downloads_path = "/tmp/firefox-downloads"
+volumes = []
 
 OptionParser.new do |opts|
   opts.on "-a", "--[no-]share-audio", "Share PulseAudio server" do |v|
@@ -23,6 +24,10 @@ OptionParser.new do |opts|
 
   opts.on "-x", "--[no-]share-x11", "Share X11 instance" do |v|
     share_x11 = v
+  end
+
+  opts.on "-v", "--volume [VOLUME]", "Add more volumes to the container" do |v|
+    volumes << v
   end
 
   opts.on "-d", "--disable-share-downloads", "Disable shared downloads path" do |v|
@@ -54,6 +59,10 @@ if share_downloads
 
   cmd << "-v" << "#{shared_downloads_path}:/browser/Downloads"
   STDERR.puts "[INFO] Shared downloads in #{shared_downloads_path}"
+end
+
+volumes.each do |vol|
+  cmd << "-v" << vol
 end
 
 cmd << IMAGE_NAME
