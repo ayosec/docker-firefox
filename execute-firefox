@@ -15,6 +15,7 @@ share_x11 = false
 share_audio = false
 share_downloads = true
 shared_downloads_path = "/tmp/firefox-downloads"
+profile_name = nil
 volumes = []
 
 OptionParser.new do |opts|
@@ -32,6 +33,14 @@ OptionParser.new do |opts|
 
   opts.on "-d", "--disable-share-downloads", "Disable shared downloads path" do |v|
     share_downloads = !v
+  end
+
+  opts.on "-pPROFILE", "--profile=PATH", "Profile path" do |v|
+    if v !~ /\A\w+\Z/
+      STDERR.puts "Invalid profile name: #{v}"
+      exit 1
+    end
+    profile_name = v
   end
 
   opts.on "-DPATH", "--downloads=PATH", "Path shared by downloads" do |v|
@@ -59,6 +68,18 @@ if share_downloads
 
   cmd << "-v" << "#{shared_downloads_path}:/browser/Downloads"
   STDERR.puts "[INFO] Shared downloads in #{shared_downloads_path}"
+end
+
+if profile_name
+  path = "/srv/firefox/profiles/#{profile_name}"
+  if not File.directory?(path)
+    uid = Process.uid
+    system "sudo", "mkdir", "-p", path
+    system "sudo", "chown", "#{uid}:#{uid}", path
+  end
+
+  cmd << "-v" << "#{path}:/browser/.mozilla"
+  STDERR.puts "[INFO] Profile in #{path}"
 end
 
 volumes.each do |vol|
