@@ -11,6 +11,11 @@ def host_addr
          addr.ip_address
 end
 
+def rand_char
+  chars = ('A'..'Z').to_a
+  chars[rand(chars.size)]
+end
+
 share_x11 = false
 share_audio = false
 share_downloads = true
@@ -48,10 +53,14 @@ OptionParser.new do |opts|
   end
 end.parse!
 
-cmd = [ "docker", "run", "-t", "--name", "firefox-" + Time.now.strftime("%Y%m%d%H%M%S") ]
+container_name = "firefox-" + rand_char + "-" + Time.now.strftime("%Y%m%d%H%M%S")
+
+puts "Container Name: \033[1m#{container_name}\033[m"
+
+cmd = [ "docker", "run", "--name", container_name ]
 
 if share_x11
-  cmd.concat %w(-i --rm -v /tmp/.X11-unix/:/tmp/.X11-unix -e)
+  cmd.concat %w(--rm -v /tmp/.X11-unix/:/tmp/.X11-unix -e)
   cmd << "DISPLAY=#{ENV["DISPLAY"]}"
 else
   cmd << "-d"
@@ -70,12 +79,15 @@ if share_downloads
   STDERR.puts "[INFO] Shared downloads in #{shared_downloads_path}"
 end
 
+if not profile_name
+  profile_name = "adhoc-#{container_name}"
+end
+
 if profile_name
   path = "/srv/firefox/profiles/#{profile_name}"
   if not File.directory?(path)
     uid = Process.uid
-    system "sudo", "mkdir", "-p", path
-    system "sudo", "chown", "#{uid}:#{uid}", path
+    system "mkdir", "-p", path
   end
 
   cmd << "-v" << "#{path}:/browser/.mozilla"
@@ -95,6 +107,17 @@ else
 end
 
 puts "[INFO] #{cmd.join(" ")}"
+
+output_log = "/tmp/.firefox-#{container_name}"
+
+if fork
+  STDERR.puts "Log to #{output_log}"
+  exit
+end
+
+STDIN.reopen("/dev/null", "r")
+STDOUT.reopen(output_log, "a")
+STDERR.reopen(output_log, "a")
 
 if share_x11
 
