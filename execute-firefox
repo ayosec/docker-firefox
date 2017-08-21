@@ -3,8 +3,6 @@
 require "optparse"
 require "socket"
 
-IMAGE_NAME = "firefox"
-
 def host_addr
   Socket.getifaddrs.
          find {|f| f.name == "docker0" and f.addr.ip? and f.addr.ipv6? == false }.
@@ -22,6 +20,7 @@ share_downloads = true
 shared_downloads_path = "/tmp/firefox-downloads"
 profile_name = nil
 volumes = []
+image_name = "firefox"
 
 OptionParser.new do |opts|
   opts.on "-a", "--[no-]share-audio", "Share PulseAudio server" do |v|
@@ -40,8 +39,12 @@ OptionParser.new do |opts|
     share_downloads = !v
   end
 
+  opts.on "-i", "--image [IMAGE]", "Docker image" do |v|
+    image_name = v
+  end
+
   opts.on "-pPROFILE", "--profile=PATH", "Profile path" do |v|
-    if v !~ /\A\w+\Z/
+    if v !~ /\A(\w|-)+\Z/
       STDERR.puts "Invalid profile name: #{v}"
       exit 1
     end
@@ -98,7 +101,7 @@ volumes.each do |vol|
   cmd << "-v" << vol
 end
 
-cmd << IMAGE_NAME
+cmd << image_name
 
 if share_x11
   cmd.concat %w(firefox --new-instance --Private)
