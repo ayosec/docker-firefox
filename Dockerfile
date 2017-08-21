@@ -17,10 +17,12 @@ ADD system /browser/system
 RUN chmod 755 /browser/system
 RUN chown -R browser: /browser
 
-ADD prefs.js /etc/firefox-esr/sane.js
-ADD prefs.js /etc/firefox/sane.js
-
 ADD local-run.sh /tmp/
 RUN sh /tmp/local-run.sh
+
+RUN apt-get install -y fonts-dejavu fonts-dejavu-core fonts-dejavu-extra
+
+ADD prefs.js /etc/firefox-esr/sane.js
+ADD prefs.js /etc/firefox/sane.js
 
 USER browser

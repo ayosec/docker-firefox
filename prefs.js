@@ -34,3 +34,5 @@ pref("social.whitelist", "");
 pref("social.remote-install.enabled", false);
 pref("social.toast-notifications.enabled", false);
 pref("webgl.disabled", true);
+pref("middlemouse.contentLoadURL", false);
+pref("browser.tabs.remote.autostart.2", "false");
