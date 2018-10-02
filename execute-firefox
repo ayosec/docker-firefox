@@ -18,6 +18,7 @@ share_x11 = false
 share_audio = false
 share_downloads = true
 shared_downloads_path = "/tmp/firefox-downloads"
+shm_size = "2g"
 profile_name = nil
 volumes = []
 image_name = "firefox"
@@ -54,6 +55,10 @@ OptionParser.new do |opts|
   opts.on "-DPATH", "--downloads=PATH", "Path shared by downloads" do |v|
     shared_downloads_path = v
   end
+
+  opts.on "-s", "--shm-size", "Set the size of /dev/shm of the container" do |v|
+    shm_size = v
+  end
 end.parse!
 
 container_name = "firefox-" + rand_char + "-" + Time.now.strftime("%Y%m%d%H%M%S")
@@ -61,6 +66,10 @@ container_name = "firefox-" + rand_char + "-" + Time.now.strftime("%Y%m%d%H%M%S"
 puts "Container Name: \033[1m#{container_name}\033[m"
 
 cmd = [ "docker", "run", "--name", container_name ]
+
+# See https://github.com/jlesage/docker-firefox#increasing-shared-memory-size
+
+cmd << "--shm-size" << shm_size
 
 if share_x11
   cmd.concat %w(--rm -v /tmp/.X11-unix/:/tmp/.X11-unix -e)
@@ -104,7 +113,7 @@ end
 cmd << image_name
 
 if share_x11
-  cmd.concat %w(firefox --new-instance --Private)
+  cmd.concat %w(/opt/firefox/firefox --new-instance --Private)
 else
   cmd << "/browser/system"
 end
