@@ -1,7 +1,7 @@
 FROM debian:sid
 
 ARG UID=1000
-ARG VERSION=62.0.3
+ARG VERSION=63.0.1
 
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive \
