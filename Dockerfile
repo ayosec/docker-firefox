@@ -1,7 +1,7 @@
 FROM debian:sid
 
 ARG UID=1000
-ARG VERSION=63.0.1
+ARG VERSION=63.0.3
 
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive \
@@ -25,6 +25,8 @@ RUN apt-get update && \
 
 RUN curl https://download-installer.cdn.mozilla.net/pub/firefox/releases/$VERSION/linux-x86_64/en-US/firefox-$VERSION.tar.bz2 | \
       tar -C /opt/ -xj
+
+ADD policies.json /opt/firefox/distribution/policies.json
 
 RUN useradd -u $UID -d /browser browser
 
