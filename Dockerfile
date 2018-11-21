@@ -20,6 +20,7 @@ RUN apt-get update && \
         ratpoison          \
         x11vnc             \
         xvfb               \
+        xclip              \
         xsel
 
 
