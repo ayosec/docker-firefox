@@ -9,11 +9,6 @@ def host_addr
          addr.ip_address
 end
 
-def rand_char
-  chars = ('A'..'Z').to_a
-  chars[rand(chars.size)]
-end
-
 share_x11 = false
 share_audio = false
 share_downloads = true
@@ -66,7 +61,11 @@ OptionParser.new do |opts|
   end
 end.parse!
 
-container_name = "firefox-" + rand_char + "-" + Time.now.strftime("%Y%m%d%H%M%S")
+if not profile_name
+  profile_name = "adhoc-#{Time.now.strftime("%Y%m%d%H%M%S")}"
+end
+
+container_name = "firefox-#{profile_name}"
 
 puts "Container Name: \033[1m#{container_name}\033[m"
 
@@ -94,10 +93,6 @@ if share_downloads
 
   cmd << "-v" << "#{shared_downloads_path}:/browser/Downloads"
   STDERR.puts "[INFO] Shared downloads in #{shared_downloads_path}"
-end
-
-if not profile_name
-  profile_name = "adhoc-#{container_name}"
 end
 
 if profile_name
