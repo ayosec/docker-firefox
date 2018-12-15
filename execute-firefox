@@ -21,6 +21,7 @@ shared_downloads_path = "/tmp/firefox-downloads"
 shm_size = "2g"
 profile_name = nil
 volumes = []
+env_vars = []
 image_name = "firefox"
 
 OptionParser.new do |opts|
@@ -34,6 +35,10 @@ OptionParser.new do |opts|
 
   opts.on "-v", "--volume [VOLUME]", "Add more volumes to the container" do |v|
     volumes << v
+  end
+
+  opts.on "-e", "--env [VOLUME]", "Add more enviroment variables to the container" do |v|
+    env_vars << v
   end
 
   opts.on "-d", "--disable-share-downloads", "Disable shared downloads path" do |v|
@@ -104,6 +109,10 @@ if profile_name
 
   cmd << "-v" << "#{path}:/browser/.mozilla"
   STDERR.puts "[INFO] Profile in #{path}"
+end
+
+env_vars.each do |env|
+  cmd << "-e" << env
 end
 
 volumes.each do |vol|
