@@ -80,7 +80,7 @@ if share_x11
   cmd.concat %w(--rm -v /tmp/.X11-unix/:/tmp/.X11-unix -e)
   cmd << "DISPLAY=#{ENV["DISPLAY"]}"
 else
-  cmd << "-d"
+  cmd << "-d" << "-e" << "DISPLAY=:0"
 end
 
 if share_audio
