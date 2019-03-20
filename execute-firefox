@@ -75,6 +75,8 @@ cmd = [ "docker", "run", "--name", container_name ]
 
 cmd << "--shm-size" << shm_size
 
+cmd << "--dns" << "1.1.1.1"
+
 if share_x11
   cmd.concat %w(--rm -v /tmp/.X11-unix/:/tmp/.X11-unix -e)
   cmd << "DISPLAY=#{ENV["DISPLAY"]}"
