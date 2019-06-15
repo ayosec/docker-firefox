@@ -9,6 +9,7 @@ def host_addr
          addr.ip_address
 end
 
+dns_servers = "1.1.1.1"
 share_x11 = false
 share_audio = false
 share_downloads = true
@@ -59,6 +60,10 @@ OptionParser.new do |opts|
   opts.on "-s", "--shm-size", "Set the size of /dev/shm of the container" do |v|
     shm_size = v
   end
+
+  opts.on "-DDNS", "--dns=DNS", "DNS servers" do |d|
+    dns_servers = d
+  end
 end.parse!
 
 if not profile_name
@@ -75,7 +80,7 @@ cmd = [ "docker", "run", "--name", container_name ]
 
 cmd << "--shm-size" << shm_size
 
-cmd << "--dns" << "1.1.1.1"
+cmd << "--dns" << dns_servers
 
 if share_x11
   cmd.concat %w(--rm -v /tmp/.X11-unix/:/tmp/.X11-unix -e)
