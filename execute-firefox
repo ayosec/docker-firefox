@@ -15,6 +15,7 @@ share_audio = false
 share_downloads = true
 shared_downloads_path = "/tmp/firefox-downloads"
 shm_size = "2g"
+profile_path = nil
 profile_name = nil
 volumes = []
 env_vars = []
@@ -45,12 +46,13 @@ OptionParser.new do |opts|
     image_name = v
   end
 
-  opts.on "-pPROFILE", "--profile=PATH", "Profile path" do |v|
-    if v !~ /\A(\w|-)+\Z/
-      STDERR.puts "Invalid profile name: #{v}"
+  opts.on "-pPROFILE", "--profile=PATH", "Profile path" do |name|
+    if name !~ /\A(\w|-)+\Z/
+      STDERR.puts "Invalid profile name: #{name}"
       exit 1
     end
-    profile_name = v
+    profile_name = name
+    profile_path = File.expand_path("~/.config/docker-firefox/profiles/#{name}")
   end
 
   opts.on "-DPATH", "--downloads=PATH", "Path shared by downloads" do |v|
@@ -66,8 +68,9 @@ OptionParser.new do |opts|
   end
 end.parse!
 
-if not profile_name
-  profile_name = "adhoc-#{Time.now.strftime("%Y%m%d%H%M%S")}"
+if not profile_path
+  profile_name = "tmp-" + Time.now.strftime("%Y%m%d%H%M%S")
+  profile_path = "/tmp/.docker-firefox/profiles/#{profile_name}"
 end
 
 container_name = "firefox-#{profile_name}"
@@ -102,16 +105,12 @@ if share_downloads
   STDERR.puts "[INFO] Shared downloads in #{shared_downloads_path}"
 end
 
-if profile_name
-  path = "/srv/firefox/profiles/#{profile_name}"
-  if not File.directory?(path)
-    uid = Process.uid
-    system "mkdir", "-p", path
-  end
-
-  cmd << "-v" << "#{path}:/browser/.mozilla"
-  STDERR.puts "[INFO] Profile in #{path}"
+if not File.directory?(profile_path)
+  system "mkdir", "-p", profile_path
 end
+
+cmd << "-v" << "#{profile_path}:/browser"
+STDERR.puts "[INFO] Profile in #{profile_path}"
 
 env_vars.each do |env|
   cmd << "-e" << env
