@@ -4,21 +4,10 @@ set -e
 
 export DISPLAY=:0
 
-Xvfb :0 -screen 0 1200x800x16 -ac +render &
+Xtigervnc :0 -screen 0 1200x800x24 -ac SecurityTypes=None &
 XSERVER=$!
 
-sleep 2
-x11vnc -forever        \
-       -bg             \
-       -nopw           \
-       -nobell         \
-       -nosel          \
-       -noprimary      \
-       -nosetprimary   \
-       -noclipboard    \
-       -nosetclipboard \
-
-
+sleep 1
 ratpoison &
 
 echo -e '\e[1mAddress:\e[m'

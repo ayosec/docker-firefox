@@ -126,7 +126,7 @@ cmd << image_name
 if share_x11
   cmd.concat %w(firefox --new-instance --Private)
 else
-  cmd << "/browser/system"
+  cmd << "/usr/local/bin/browsersystem"
 end
 
 puts "[INFO] #{cmd.join(" ")}"

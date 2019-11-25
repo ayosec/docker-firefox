@@ -18,6 +18,7 @@ RUN apt-get update && \
         libx11-xcb1        \
         pulseaudio         \
         ratpoison          \
+        tigervnc-standalone-server \
         x11vnc             \
         xvfb               \
         xclip              \
@@ -28,15 +29,9 @@ RUN curl https://download-installer.cdn.mozilla.net/pub/firefox/releases/$VERSIO
       tar -C /opt/ -xj
 
 ADD policies.json /opt/firefox/distribution/policies.json
+ADD system /usr/local/bin/browsersystem
 
 RUN useradd -u $UID -d /browser browser
-
-ADD system /browser/system
-RUN chmod 755 /browser/system
-RUN chown -R browser: /browser
-
-ADD local-run.sh /tmp/
-RUN sh /tmp/local-run.sh
 
 ADD prefs.js /opt/firefox/browser/defaults/preferences/all-x.js
 
