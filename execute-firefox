@@ -168,7 +168,12 @@ else
       end
     end
 
-    exec "gvncviewer", ip_address
+    exec "xtigervncviewer",
+      "-AcceptClipboard=0",
+      "-SetPrimary=0",
+      "-SendClipboard=0",
+      "-SendPrimary=0",
+      ip_address
   end
 
   system "docker", "wait", cid
