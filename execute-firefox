@@ -11,7 +11,6 @@ end
 
 dns_servers = "1.1.1.1"
 share_x11 = false
-share_audio = false
 share_downloads = true
 shared_downloads_path = "/tmp/firefox-downloads"
 shm_size = "2g"
@@ -22,10 +21,6 @@ env_vars = []
 image_name = "firefox"
 
 OptionParser.new do |opts|
-  opts.on "-a", "--[no-]share-audio", "Share PulseAudio server" do |v|
-    share_audio = v
-  end
-
   opts.on "-x", "--[no-]share-x11", "Share X11 instance" do |v|
     share_x11 = v
   end
@@ -86,14 +81,21 @@ cmd << "--shm-size" << shm_size
 cmd << "--dns" << dns_servers
 
 if share_x11
-  cmd.concat %w(--rm -v /tmp/.X11-unix/:/tmp/.X11-unix -e)
-  cmd << "DISPLAY=#{ENV["DISPLAY"]}"
+  if xdg_rt = ENV["XDG_RUNTIME_DIR"]
+    cmd << "-e" << "XDG_RUNTIME_DIR=#{xdg_rt}"
+    cmd << "-v" << "#{xdg_rt}:#{xdg_rt}"
+  end
+
+  if wl_display = ENV["WAYLAND_DISPLAY"]
+    cmd << "--rm"
+    cmd << "-e" << "MOZ_ENABLE_WAYLAND=1"
+    cmd << "-e" << "WAYLAND_DISPLAY=#{wl_display}"
+  else
+    cmd.concat %w(--rm -v /tmp/.X11-unix/:/tmp/.X11-unix -e)
+    cmd << "DISPLAY=#{ENV["DISPLAY"]}"
+  end
 else
   cmd << "-d" << "-e" << "DISPLAY=:0"
-end
-
-if share_audio
-  cmd << "-e" << "PULSE_SERVER=tcp:#{host_addr}"
 end
 
 if share_downloads
@@ -166,7 +168,7 @@ else
       end
     end
 
-    exec "vncviewer", "-encodings", "copyrect tight zrle hextile", "#{ip_address}:0"
+    exec "gvncviewer", ip_address
   end
 
   system "docker", "wait", cid
