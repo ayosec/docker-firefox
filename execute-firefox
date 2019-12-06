@@ -153,6 +153,8 @@ STDIN.reopen("/dev/null", "r")
 STDOUT.reopen(output_log, "a")
 STDERR.reopen(output_log, "a")
 
+cmd.concat ARGV
+
 if share_x11
 
   exec(*cmd)
