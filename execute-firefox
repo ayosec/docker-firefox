@@ -47,7 +47,7 @@ OptionParser.new do |opts|
       exit 1
     end
     profile_name = name
-    profile_path = File.expand_path("~/.config/docker-firefox/profiles/#{name}")
+    profile_path = File.expand_path("~/.config/firefox-container/profiles/#{name}")
   end
 
   opts.on "-DPATH", "--downloads=PATH", "Path shared by downloads" do |v|
@@ -65,7 +65,7 @@ end.parse!
 
 if not profile_path
   profile_name = "tmp-" + Time.now.strftime("%Y%m%d%H%M%S")
-  profile_path = "/tmp/.docker-firefox/profiles/#{profile_name}"
+  profile_path = "/tmp/.container-firefox/profiles/#{profile_name}"
 end
 
 container_name = "firefox-#{profile_name}"
@@ -73,8 +73,6 @@ container_name = "firefox-#{profile_name}"
 puts "Container Name: \033[1m#{container_name}\033[m"
 
 cmd = [ "docker", "run", "--name", container_name ]
-
-# See https://github.com/jlesage/docker-firefox#increasing-shared-memory-size
 
 cmd << "--shm-size" << shm_size
 
