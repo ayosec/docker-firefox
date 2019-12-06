@@ -84,6 +84,10 @@ if share_x11
     cmd << "-v" << "#{xdg_rt}:#{xdg_rt}"
   end
 
+  if dpi_scale = ENV["GDK_DPI_SCALE"]
+    cmd << "-e" << "GDK_DPI_SCALE=#{dpi_scale}"
+  end
+
   if wl_display = ENV["WAYLAND_DISPLAY"]
     cmd << "--rm"
     cmd << "-e" << "MOZ_ENABLE_WAYLAND=1"
