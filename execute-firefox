@@ -16,6 +16,7 @@ shared_downloads_path = "/tmp/firefox-downloads"
 shm_size = "2g"
 profile_path = nil
 profile_name = nil
+start_private = nil
 volumes = []
 env_vars = []
 image_name = "firefox"
@@ -27,6 +28,10 @@ OptionParser.new do |opts|
 
   opts.on "-v", "--volume [VOLUME]", "Add more volumes to the container" do |v|
     volumes << v
+  end
+
+  opts.on "--[no-]private", "Start in private mode" do |v|
+    start_private = v
   end
 
   opts.on "-e", "--env [VOLUME]", "Add more enviroment variables to the container" do |v|
@@ -66,6 +71,8 @@ end.parse!
 if not profile_path
   profile_name = "tmp-" + Time.now.strftime("%Y%m%d%H%M%S")
   profile_path = "/tmp/.container-firefox/profiles/#{profile_name}"
+
+  start_private = true if start_private.nil?
 end
 
 container_name = "firefox-#{profile_name}"
@@ -127,7 +134,8 @@ end
 cmd << image_name
 
 if share_x11
-  cmd.concat %w(firefox --new-instance --Private)
+  cmd.concat %w(firefox --new-instance)
+  cmd << "--Private" if start_private
 else
   cmd << "/usr/local/bin/browsersystem"
 end
