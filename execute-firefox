@@ -85,14 +85,14 @@ cmd << "--shm-size" << shm_size
 
 cmd << "--dns" << dns_servers
 
+if dpi_scale = ENV["GDK_DPI_SCALE"]
+  cmd << "-e" << "GDK_DPI_SCALE=#{dpi_scale}"
+end
+
 if share_x11
   if xdg_rt = ENV["XDG_RUNTIME_DIR"]
     cmd << "-e" << "XDG_RUNTIME_DIR=#{xdg_rt}"
     cmd << "-v" << "#{xdg_rt}:#{xdg_rt}"
-  end
-
-  if dpi_scale = ENV["GDK_DPI_SCALE"]
-    cmd << "-e" << "GDK_DPI_SCALE=#{dpi_scale}"
   end
 
   if wl_display = ENV["WAYLAND_DISPLAY"]
@@ -103,6 +103,8 @@ if share_x11
     cmd.concat %w(--rm -v /tmp/.X11-unix/:/tmp/.X11-unix -e)
     cmd << "DISPLAY=#{ENV["DISPLAY"]}"
   end
+
+  cmd << "--device=/dev/dri"
 else
   cmd << "-d" << "-e" << "DISPLAY=:0"
 end
@@ -140,6 +142,7 @@ else
   cmd << "/usr/local/bin/browsersystem"
 end
 
+cmd.concat ARGV
 puts "[INFO] #{cmd.join(" ")}"
 
 output_log = "/tmp/.firefox-#{container_name}"
@@ -152,8 +155,6 @@ end
 STDIN.reopen("/dev/null", "r")
 STDOUT.reopen(output_log, "a")
 STDERR.reopen(output_log, "a")
-
-cmd.concat ARGV
 
 if share_x11
 
