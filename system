@@ -13,7 +13,7 @@ ratpoison &
 echo -e '\e[1mAddress:\e[m'
 ip addr show eth0 | grep inet
 
-/opt/firefox/firefox --Private --new-instance
+/opt/firefox/firefox --Private --new-instance "$@"
 
 kill -9 $XSERVER
 wait
