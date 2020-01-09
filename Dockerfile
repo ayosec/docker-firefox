@@ -1,7 +1,7 @@
 FROM debian:buster
 
 ARG UID=1000
-ARG VERSION=71.0
+ARG VERSION=72.0
 
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive \
