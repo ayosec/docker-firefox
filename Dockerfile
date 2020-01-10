@@ -1,30 +1,31 @@
 FROM debian:buster
 
-ARG UID=1000
-ARG VERSION=72.0
-
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive \
-      apt-get install -y --no-install-recommends \
-        bzip2              \
-        ca-certificates    \
-        curl               \
-        ffmpeg             \
-        fonts-dejavu       \
-        fonts-dejavu-core  \
-        fonts-dejavu-extra \
-        libdbus-glib-1-2   \
-        libgtk-3-0         \
-        libx11-xcb1        \
-        pulseaudio         \
-        ratpoison          \
+      apt-get install              \
+        -y                         \
+        --no-install-recommends    \
+        bzip2                      \
+        ca-certificates            \
+        curl                       \
+        ffmpeg                     \
+        fonts-dejavu               \
+        fonts-dejavu-core          \
+        fonts-dejavu-extra         \
+        libdbus-glib-1-2           \
+        libgtk-3-0                 \
+        libx11-xcb1                \
+        pulseaudio                 \
+        ratpoison                  \
         tigervnc-standalone-server \
-        x11vnc             \
-        xvfb               \
-        xclip              \
-        xsel               \
+        x11vnc                     \
+        xvfb                       \
+        xclip                      \
+        xsel                       \
         wl-clipboard
 
+ARG UID=1000
+ARG VERSION=72.0.1
 
 RUN curl https://download-installer.cdn.mozilla.net/pub/firefox/releases/$VERSION/linux-x86_64/en-US/firefox-$VERSION.tar.bz2 | \
       tar -C /opt/ -xj
