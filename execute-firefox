@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 
+require "fileutils"
 require "optparse"
 require "socket"
 
@@ -9,10 +10,12 @@ def host_addr
          addr.ip_address
 end
 
+DOWNLOADS_PREFIX = File.expand_path("~/.local/share/firefox-downloads")
+
 dns_servers = "1.1.1.1"
 share_x11 = false
 share_downloads = true
-shared_downloads_path = "/tmp/firefox-downloads"
+shared_downloads_path = nil
 shm_size = "2g"
 profile_path = nil
 profile_name = nil
@@ -53,6 +56,7 @@ OptionParser.new do |opts|
     end
     profile_name = name
     profile_path = File.expand_path("~/.local/share/firefox-profiles/#{name}")
+    shared_downloads_path = File.join(DOWNLOADS_PREFIX, name)
   end
 
   opts.on "-DPATH", "--downloads=PATH", "Path shared by downloads" do |v|
@@ -109,9 +113,12 @@ else
   cmd << "-d" << "-e" << "DISPLAY=:0"
 end
 
+
 if share_downloads
+  shared_downloads_path ||= File.join(DOWNLOADS_PREFIX, "ANY")
+
   if not File.directory?(shared_downloads_path)
-    Dir.mkdir shared_downloads_path
+    FileUtils.mkdir_p shared_downloads_path
   end
 
   cmd << "-v" << "#{shared_downloads_path}:/browser/Downloads"
