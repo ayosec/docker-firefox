@@ -19,6 +19,8 @@ shared_downloads_path = nil
 shm_size = "2g"
 profile_path = nil
 profile_name = nil
+profile_create = false
+profile_template = "_default"
 start_private = nil
 volumes = []
 env_vars = []
@@ -49,14 +51,17 @@ OptionParser.new do |opts|
     image_name = v
   end
 
-  opts.on "-pPROFILE", "--profile=PATH", "Profile path" do |name|
-    if name !~ /\A(\w|-)+\Z/
-      STDERR.puts "Invalid profile name: #{name}"
-      exit 1
-    end
+  opts.on "-pPROFILE", "--profile=PATH", "Profile name" do |name|
     profile_name = name
-    profile_path = File.expand_path("~/.local/share/firefox-profiles/#{name}")
-    shared_downloads_path = File.join(DOWNLOADS_PREFIX, name)
+  end
+
+  opts.on "-PPROFILE", "--new-profile=PATH", "Create a new profile" do |name|
+    profile_name = name
+    profile_create = true
+  end
+
+  opts.on "-tTEMPLATE", "--template=TEMPLATE", "Template to create new profile" do |template|
+    profile_template = template == "none" ? nil : template
   end
 
   opts.on "-DPATH", "--downloads=PATH", "Path shared by downloads" do |v|
@@ -72,9 +77,21 @@ OptionParser.new do |opts|
   end
 end.parse!
 
-if not profile_path
+def profile_path(name)
+  File.expand_path("~/.local/share/firefox-profiles/#{name}")
+end
+
+if profile_name
+  if profile_name !~ /\A(\w|-)+\Z/
+    STDERR.puts "Invalid profile name: #{profile_name}"
+    exit 1
+  end
+  profile_path = profile_path(profile_name)
+  shared_downloads_path = File.join(DOWNLOADS_PREFIX, profile_name)
+else
   profile_name = "tmp-" + Time.now.strftime("%Y%m%d%H%M%S")
   profile_path = "/tmp/.firefox-profiles/#{profile_name}"
+  profile_create = true
 
   start_private = true if start_private.nil?
 end
@@ -126,7 +143,24 @@ if share_downloads
 end
 
 if not File.directory?(profile_path)
-  system "mkdir", "-p", profile_path
+  if profile_create
+    FileUtils.mkdir_p(profile_path)
+
+    if profile_template
+      %w(.mozilla .config).each do |dirname|
+        template_path = File.join(profile_path(profile_template), dirname)
+        if File.directory?(template_path)
+          STDERR.puts "[INFO] cp -r #{template_path} #{profile_path}"
+          FileUtils.cp_r template_path, profile_path, preserve: true
+        else
+          STDERR.puts "[WARN] Missing template item #{template_path}"
+        end
+      end
+    end
+  else
+    STDERR.puts "[ERROR] Profile '#{profile_name}' does not exist. Create it with -P"
+    exit 1
+  end
 end
 
 cmd << "-v" << "#{profile_path}:/browser"
