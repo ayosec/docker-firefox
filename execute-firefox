@@ -131,17 +131,6 @@ else
 end
 
 
-if share_downloads
-  shared_downloads_path ||= File.join(DOWNLOADS_PREFIX, "ANY")
-
-  if not File.directory?(shared_downloads_path)
-    FileUtils.mkdir_p shared_downloads_path
-  end
-
-  cmd << "-v" << "#{shared_downloads_path}:/browser/Downloads"
-  STDERR.puts "[INFO] Shared downloads in #{shared_downloads_path}"
-end
-
 if not File.directory?(profile_path)
   if profile_create
     FileUtils.mkdir_p(profile_path)
@@ -165,6 +154,17 @@ end
 
 cmd << "-v" << "#{profile_path}:/browser"
 STDERR.puts "[INFO] Profile in #{profile_path}"
+
+if share_downloads
+  shared_downloads_path ||= File.join(DOWNLOADS_PREFIX, "ANY")
+
+  if not File.directory?(shared_downloads_path)
+    FileUtils.mkdir_p shared_downloads_path
+  end
+
+  cmd << "-v" << "#{shared_downloads_path}:/browser/Downloads"
+  STDERR.puts "[INFO] Shared downloads in #{shared_downloads_path}"
+end
 
 env_vars.each do |env|
   cmd << "-e" << env
