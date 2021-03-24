@@ -18,14 +18,15 @@ RUN apt-get update && \
         pulseaudio                 \
         ratpoison                  \
         tigervnc-standalone-server \
+        ttf-unifont                \
         x11vnc                     \
-        xvfb                       \
         xclip                      \
+        xfonts-unifont             \
         xsel                       \
-        wl-clipboard
+        xvfb
 
 ARG UID=1000
-ARG VERSION=81.0
+ARG VERSION=87.0
 
 RUN curl https://download-installer.cdn.mozilla.net/pub/firefox/releases/$VERSION/linux-x86_64/en-US/firefox-$VERSION.tar.bz2 | \
       tar -C /opt/ -xj
