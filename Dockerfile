@@ -26,7 +26,7 @@ RUN apt-get update && \
         xvfb
 
 ARG UID=1000
-ARG VERSION=87.0
+ARG VERSION=88.0
 
 RUN curl https://download-installer.cdn.mozilla.net/pub/firefox/releases/$VERSION/linux-x86_64/en-US/firefox-$VERSION.tar.bz2 | \
       tar -C /opt/ -xj
