@@ -5,6 +5,7 @@ RUN apt-get update && \
       apt-get install              \
         -y                         \
         --no-install-recommends    \
+        bsdtar                     \
         bzip2                      \
         ca-certificates            \
         curl                       \
@@ -15,6 +16,7 @@ RUN apt-get update && \
         libdbus-glib-1-2           \
         libgtk-3-0                 \
         libx11-xcb1                \
+        patch                      \
         pulseaudio                 \
         ratpoison                  \
         tigervnc-standalone-server \
@@ -23,7 +25,8 @@ RUN apt-get update && \
         xclip                      \
         xfonts-unifont             \
         xsel                       \
-        xvfb
+        xvfb                       \
+        zip
 
 ARG UID=1000
 ARG VERSION=88.0
@@ -32,12 +35,13 @@ RUN curl https://download-installer.cdn.mozilla.net/pub/firefox/releases/$VERSIO
       tar -C /opt/ -xj
 
 ADD policies.json /opt/firefox/distribution/policies.json
-ADD system /usr/local/bin/browsersystem
-
-RUN useradd -u $UID -d /browser browser
-
 ADD prefs.js /opt/firefox/browser/defaults/preferences/all-x.js
 
+ADD system /usr/local/bin/browsersystem
 ADD run-firefox /usr/local/bin/firefox
 
+ADD patches /opt/firefox-patches
+RUN /opt/firefox-patches/apply.sh /opt/firefox
+
+RUN useradd -u $UID -d /browser browser
 USER browser

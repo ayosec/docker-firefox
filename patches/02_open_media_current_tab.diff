@@ -1,0 +1,30 @@
+diff -ru omni.ja.orig/chrome/browser/content/browser/nsContextMenu.js omni.ja/chrome/browser/content/browser/nsContextMenu.js
+--- omni.ja.orig/chrome/browser/content/browser/nsContextMenu.js	2010-01-01 00:00:00.000000000 +0000
++++ omni.ja/chrome/browser/content/browser/nsContextMenu.js	2021-04-28 22:01:55.830125096 +0000
+@@ -1376,9 +1376,6 @@
+   // Change current window to the URL of the image, video, or audio.
+   viewMedia(e) {
+     let where = whereToOpenLink(e, false, false);
+-    if (where == "current") {
+-      where = "tab";
+-    }
+     let referrerInfo = this.contentData.referrerInfo;
+     let systemPrincipal = Services.scriptSecurityManager.getSystemPrincipal();
+     if (this.onCanvas) {
+diff -ru omni.ja.orig/localization/en-US/browser/browserContext.ftl omni.ja/localization/en-US/browser/browserContext.ftl
+--- omni.ja.orig/localization/en-US/browser/browserContext.ftl	2010-01-01 00:00:00.000000000 +0000
++++ omni.ja/localization/en-US/browser/browserContext.ftl	2021-04-28 22:03:37.988353454 +0000
+@@ -216,11 +216,11 @@
+     .accesskey = R
+
+ main-context-menu-image-view-new-tab =
+-    .label = Open Image in New Tab
++    .label = Open Image
+     .accesskey = I
+
+ main-context-menu-video-view-new-tab =
+-    .label = Open Video in New Tab
++    .label = Open Video
+     .accesskey = i
+
+ main-context-menu-image-copy =

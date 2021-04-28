@@ -1,0 +1,14 @@
+diff -ru omni.ja.orig/localization/en-US/browser/browserContext.ftl omni.ja/localization/en-US/browser/browserContext.ftl
+--- omni.ja.orig/localization/en-US/browser/browserContext.ftl	2010-01-01 00:00:00.000000000 +0000
++++ omni.ja/localization/en-US/browser/browserContext.ftl	2021-04-28 22:03:37.988353454 +0000
+@@ -134,8 +134,8 @@
+     .accesskey = l
+
+ main-context-menu-copy-link-simple =
+-    .label = Copy Link
+-    .accesskey = L
++    .label = Copy Link Address
++    .accesskey = A
+
+ ## Media (video/audio) controls
+ ##
