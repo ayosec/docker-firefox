@@ -1,0 +1,25 @@
+diff -ru omnija.orig/chrome/browser/skin/classic/browser/browser.css omnija/chrome/browser/skin/classic/browser/browser.css
+--- omni.ja.orig/chrome/browser/skin/classic/browser/browser.css	2010-01-01 00:00:00.000000000 +0000
++++ omni.ja/chrome/browser/skin/classic/browser/browser.css	2021-06-01 17:21:27.626758328 +0000
+@@ -6153,8 +6153,8 @@
+ @media (-moz-proton) {
+ :root {
+   --tab-min-height: 36px;
+-  --tab-border-radius: 4px;
+-  --tab-shadow-max-size: 6px;
++  --tab-border-radius: 0;
++  --tab-shadow-max-size: 0;
+   --proton-tab-block-margin: 4px;
+   --inline-tab-padding: 8px;
+   /* --tabpanel-background-color matches $in-content-page-background in newtab
+@@ -6882,6 +6882,10 @@
+   margin-block: var(--proton-tab-block-margin);
+ }
+ 
++.tab-background:not([selected=true]) {
++  border-right: 2px solid #444;
++}
++
+ :root[sizemode=maximized] .tabbrowser-tab {
+   margin-top: 0 !important;
+ }
