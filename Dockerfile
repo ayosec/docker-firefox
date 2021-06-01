@@ -14,6 +14,7 @@ RUN apt-get update && \
         fonts-dejavu-core          \
         fonts-dejavu-extra         \
         libdbus-glib-1-2           \
+        libegl1                    \
         libgtk-3-0                 \
         libx11-xcb1                \
         patch                      \
@@ -34,7 +35,7 @@ ARG VERSION=89.0
 RUN curl https://download-installer.cdn.mozilla.net/pub/firefox/releases/$VERSION/linux-x86_64/en-US/firefox-$VERSION.tar.bz2 | \
       tar -C /opt/ -xj
 
-ADD policies.json /opt/firefox/distribution/policies.json
+#ADD policies.json /opt/firefox/distribution/policies.json
 ADD prefs.js /opt/firefox/browser/defaults/preferences/all-x.js
 
 ADD system /usr/local/bin/browsersystem
