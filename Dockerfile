@@ -30,7 +30,7 @@ RUN apt-get update && \
         zip
 
 ARG UID=1000
-ARG VERSION=89.0.1
+ARG VERSION=89.0.2
 
 RUN curl https://download-installer.cdn.mozilla.net/pub/firefox/releases/$VERSION/linux-x86_64/en-US/firefox-$VERSION.tar.bz2 | \
       tar -C /opt/ -xj
@@ -43,6 +43,8 @@ ADD run-firefox /usr/local/bin/firefox
 
 ADD patches /opt/firefox-patches
 RUN /opt/firefox-patches/apply.sh /opt/firefox
+
+ADD policies.json /opt/firefox/distribution/policies.json
 
 RUN useradd -u $UID -d /browser browser
 USER browser
