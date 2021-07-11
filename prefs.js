@@ -44,4 +44,4 @@ pref("geo.enabled", false);
 pref("privacy.donottrackheader.enabled", true);
 pref("privacy.resistFingerprinting", true);
 pref("privacy.trackingprotection.enabled", true);
-pref("widget.non-native-theme.scrollbar.size", 20);
+pref("widget.non-native-theme.enabled", false);
