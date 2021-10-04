@@ -1,11 +1,10 @@
-FROM debian:buster
+FROM debian:bullseye
 
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive \
       apt-get install              \
         -y                         \
         --no-install-recommends    \
-        bsdtar                     \
         bzip2                      \
         ca-certificates            \
         curl                       \
@@ -13,6 +12,7 @@ RUN apt-get update && \
         fonts-dejavu               \
         fonts-dejavu-core          \
         fonts-dejavu-extra         \
+        libarchive-tools           \
         libdbus-glib-1-2           \
         libegl1                    \
         libgtk-3-0                 \
@@ -30,7 +30,7 @@ RUN apt-get update && \
         zip
 
 ARG UID=1000
-ARG VERSION=92.0
+ARG VERSION=92.0.1
 
 RUN curl https://download-installer.cdn.mozilla.net/pub/firefox/releases/$VERSION/linux-x86_64/en-US/firefox-$VERSION.tar.bz2 | \
       tar -C /opt/ -xj
