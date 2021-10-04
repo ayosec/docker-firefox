@@ -100,7 +100,7 @@ container_name = "firefox-#{profile_name}"
 
 puts "Container Name: \033[1m#{container_name}\033[m"
 
-cmd = [ "docker", "run", "--name", container_name ]
+cmd = [ "docker", "run", "--name", container_name, "--pull=never" ]
 
 cmd << "--shm-size" << shm_size
 
