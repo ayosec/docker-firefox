@@ -186,7 +186,8 @@ end
 cmd.concat ARGV
 puts "[INFO] #{cmd.join(" ")}"
 
-output_log = "/tmp/.firefox-#{container_name}"
+output_log = "/tmp/.firefox-logs/#{container_name}"
+FileUtils.mkdir_p(File.dirname(output_log))
 
 if fork
   STDERR.puts "Log to #{output_log}"
