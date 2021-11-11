@@ -141,6 +141,12 @@ if not File.directory?(profile_path)
         if File.directory?(template_path)
           STDERR.puts "[INFO] cp -r #{template_path} #{profile_path}"
           FileUtils.cp_r template_path, profile_path, preserve: true
+
+          # Rename the Firefox profile to have a unique DBus name
+          profiles_ini = File.join(profile_path, ".mozilla/firefox/profiles.ini")
+          File.write(
+            profiles_ini,
+            File.read(profiles_ini).gsub(/^Name=.*?$/, "Name=#{profile_name}"))
         else
           STDERR.puts "[WARN] Missing template item #{template_path}"
         end
