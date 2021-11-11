@@ -17,6 +17,7 @@ RUN apt-get update && \
         libdbus-glib-1-2           \
         libegl1                    \
         libgtk-3-0                 \
+        libpci3                    \
         libx11-xcb1                \
         patch                      \
         pulseaudio                 \
@@ -31,7 +32,7 @@ RUN apt-get update && \
         zip
 
 ARG UID=1000
-ARG VERSION=93.0
+ARG VERSION=94.0.1
 
 RUN curl https://download-installer.cdn.mozilla.net/pub/firefox/releases/$VERSION/linux-x86_64/en-US/firefox-$VERSION.tar.bz2 | \
       tar -C /opt/ -xj
