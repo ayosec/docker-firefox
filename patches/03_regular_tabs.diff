@@ -20,6 +20,6 @@ diff -ru omnija.orig/chrome/browser/skin/classic/browser/browser.css omnija/chro
 +  border-right: 2px solid #444;
 +}
 +
- /* Add a translucent color on top of multiselected tabs */
- .tab-background[multiselected=true]:not([selected=true]) {
-   opacity: .9;
+ @media (prefers-contrast) {
+   .tab-background:is([selected], [multiselected]),
+   .tabbrowser-tab:hover > .tab-stack > .tab-background {
