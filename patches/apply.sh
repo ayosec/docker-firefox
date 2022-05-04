@@ -24,3 +24,5 @@ done
 # Repack the omni.ja file
 mv -n "$OMNIJAR" "${OMNIJAR}.orig"
 zip -0 -q -r -X -D "$OMNIJAR" .
+
+rm -r "$WORKDIR"

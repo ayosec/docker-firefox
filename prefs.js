@@ -46,3 +46,4 @@ pref("privacy.resistFingerprinting", true);
 pref("privacy.trackingprotection.enabled", true);
 pref("widget.non-native-theme.enabled", false);
 pref("widget.non-native-theme.scrollbar.size.override", 25);
+pref("widget.gtk.overlay-scrollbars.enabled", false);

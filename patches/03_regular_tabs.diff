@@ -1,7 +1,6 @@
-diff -ru omnija.orig/chrome/browser/skin/classic/browser/browser.css omnija/chrome/browser/skin/classic/browser/browser.css
---- omni.ja.orig/chrome/browser/skin/classic/browser/browser.css	2010-01-01 00:00:00.000000000 +0000
-+++ omni.ja/chrome/browser/skin/classic/browser/browser.css	2021-06-01 17:21:27.626758328 +0000
-@@ -5162,8 +5162,8 @@
+--- ./chrome.orig/browser/skin/classic/browser/tabs.css	2022-05-04 08:24:58.357468055 +0000
++++ ./chrome/browser/skin/classic/browser/tabs.css	2022-05-04 08:26:13.018814025 +0000
+@@ -9,14 +9,18 @@
    --inline-tab-padding: 8px;
    /* Value for --in-content-page-background in in-content/common.inc.css */
    --tabpanel-background-color: #f9f9fa;
@@ -12,14 +11,13 @@ diff -ru omnija.orig/chrome/browser/skin/classic/browser/browser.css omnija/chro
    --tab-block-margin: 4px;
    /* --tabpanel-background-color matches $in-content-page-background in newtab
       (browser/components/newtab/content-src/styles/_variables.scss) */
-@@ -5731,6 +5731,10 @@
-   background-repeat: repeat-x;
+   --tabpanel-background-color: #F9F9FB;
  }
 
 +.tab-background:not([selected=true]) {
 +  border-right: 2px solid #444;
 +}
 +
- @media (prefers-contrast) {
-   .tab-background:is([selected], [multiselected]),
-   .tabbrowser-tab:hover > .tab-stack > .tab-background {
+ @media (-moz-content-prefers-color-scheme: dark) {
+   :root {
+     /* --tabpanel-background-color matches $in-content-page-background in newtab
