@@ -46,6 +46,12 @@ ADD run-firefox /usr/local/bin/firefox
 ADD patches /opt/firefox-patches
 RUN /opt/firefox-patches/apply.sh /opt/firefox
 
+# Use black-and-white emojis
+RUN \
+  cd /opt/firefox/fonts && \
+  rm TwemojiMozilla.ttf && \
+  curl 'https://fonts.google.com/download?family=Noto%20Emoji' | bsdtar -xf - --strip-components=1
+
 ADD policies.json /opt/firefox/distribution/policies.json
 
 RUN useradd -u $UID -d /browser browser
