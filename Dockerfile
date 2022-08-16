@@ -12,6 +12,7 @@ RUN apt-get update && \
         fonts-dejavu               \
         fonts-dejavu-core          \
         fonts-dejavu-extra         \
+        fonts-hanazono             \
         iproute2                   \
         libarchive-tools           \
         libdbus-glib-1-2           \
