@@ -12,6 +12,7 @@
    /* --tabpanel-background-color matches $in-content-page-background in newtab
       (browser/components/newtab/content-src/styles/_variables.scss) */
    --tabpanel-background-color: #F9F9FB;
+   --tab-attention-icon-color: var(--lwt-tab-attention-icon-color, rgb(42,195,162));
  }
 
 +.tab-background:not([selected=true]) {
