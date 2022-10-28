@@ -1,6 +1,6 @@
---- ./chrome.orig/browser/skin/classic/browser/tabs.css	2022-05-04 08:24:58.357468055 +0000
-+++ ./chrome/browser/skin/classic/browser/tabs.css	2022-05-04 08:26:13.018814025 +0000
-@@ -9,14 +9,18 @@
+--- ./chrome/browser/skin/classic/browser/tabs.css.orig	2022-10-28 19:38:34.873641106 +0000
++++ ./chrome/browser/skin/classic/browser/tabs.css	2022-10-28 19:39:40.671502183 +0000
+@@ -9,8 +9,8 @@
    --inline-tab-padding: 8px;
    /* Value for --in-content-page-background in in-content/common.inc.css */
    --tabpanel-background-color: #f9f9fa;
@@ -11,14 +11,11 @@
    --tab-block-margin: 4px;
    /* --tabpanel-background-color matches $in-content-page-background in newtab
       (browser/components/newtab/content-src/styles/_variables.scss) */
-   --tabpanel-background-color: #F9F9FB;
-   --tab-attention-icon-color: var(--lwt-tab-attention-icon-color, rgb(42,195,162));
+@@ -794,3 +794,7 @@
+ .all-tabs-secondary-button > label {
+   display: none !important; /* override panelUI-shared.css */
  }
-
++
 +.tab-background:not([selected=true]) {
 +  border-right: 2px solid #444;
 +}
-+
- #tabbrowser-tabpanels browser {
-   color-scheme: env(-moz-content-preferred-color-scheme);
- }
