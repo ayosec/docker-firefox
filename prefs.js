@@ -8,6 +8,7 @@ pref("browser.bookmarks.restore_default_bookmarks", false);
 pref("browser.contentblocking.category", "strict");
 pref("browser.ctrlTab.recentlyUsedOrder", false);
 pref("browser.display.use_document_fonts", 0);
+pref("browser.eme.ui.enabled", false);
 pref("browser.fixup.dns_first_for_single_words", true);
 pref("browser.menu.showViewImageInfo", true);
 pref("browser.newtabpage.activity-stream.asrouter.userprefs.cfr.addons", false);
