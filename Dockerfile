@@ -33,7 +33,7 @@ RUN apt-get update && \
         zip
 
 ARG UID=1000
-ARG VERSION=110.0
+ARG VERSION=111.0
 
 RUN curl https://download-installer.cdn.mozilla.net/pub/firefox/releases/$VERSION/linux-x86_64/en-US/firefox-$VERSION.tar.bz2 | \
       tar -C /opt/ -xj
