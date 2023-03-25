@@ -1,0 +1,10 @@
+--- ./chrome/browser/skin/classic/browser/addons/unified-extensions.css.orig	2023-03-25 00:00:00 +0000
++++ ./chrome/browser/skin/classic/browser/addons/unified-extensions.css	2023-03-25 00:00:00 +0000
+@@ -1,3 +1,7 @@
++#unified-extensions-button, #unified-extensions-button > * {
++  width: 0 !important;
++  padding: 0 !important;
++}
+ /* This Source Code Form is subject to the terms of the Mozilla Public
+  * License, v. 2.0. If a copy of the MPL was not distributed with this
+  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
